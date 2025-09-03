@@ -21,25 +21,28 @@
 <body>
 <header>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="{% url 'homepage' %}">Play2Learn</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse"
-      data-target="#navbarSupportedContent" aria-expanded="false"
-      aria-controls="navbarSupportedContent" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <a class="navbar-brand" href="{% url 'pages:homepage' %}">Play2Learn</a>
+  <button class="navbar-toggler" type="button"
+          data-bs-toggle="collapse"           
+          data-bs-target="#navbarSupportedContent" 
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
   
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="{% url 'homepage' %}">Home 
+          <a class="nav-link" href="{% url 'pages:homepage' %}">Home 
             <span class="sr-only">(current)</span>
             </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'filters' %}">Filters</a>
+          <a class="nav-link" href="#">Filters</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'tags' %}">Tags</a>
+          <a class="nav-link" href="#">Tags</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" 
@@ -73,12 +76,11 @@
       <div class="float-end m-1 me-2">Copyright &copy; 2025 Play2Learn.</div>
       <nav>
         <ul class="nav">
-          <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'pages:about' %}">About</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
         </ul>
       </nav>
     </div>
-  </nav>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
 </body>
