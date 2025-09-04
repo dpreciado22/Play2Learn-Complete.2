@@ -1,7 +1,59 @@
 {% extends "_base.html" %}
+{% load common_tags %}
 
 {% block title %}Home{% endblock %}
 {% block header %}Welcome!{% endblock %}
+
 {% block main %}
   <p>Thank you for visiting our site!</p>
+
+  {# Carousel #}
+  <div id="reviewCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      {% for r in featured_reviews %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+          <div class="p-4 text-center">
+            <h5>{{ r.title }}</h5>
+            <p class="mb-0">{{ r.body }}</p>
+            <small class="text-muted">— {{ r.user.username }}</small>
+          </div>
+        </div>
+      {% empty %}
+        <div class="carousel-item active">
+          <div class="p-4 text-center">No reviews yet.</div>
+        </div>
+      {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#reviewCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#reviewCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+  {# Quick leaderboards #}
+  <h3 class="mt-4">Top Math Facts</h3>
+  <ol class="list-group list-group-numbered mb-3">
+    {% for s in top_math %}
+      <li class="list-group-item d-flex justify-content-between">
+        <span>{{ s.user.username }}</span><strong>{{ s.score }}</strong>
+      </li>
+    {% empty %}
+      <li class="list-group-item">No scores yet.</li>
+    {% endfor %}
+  </ol>
+
+  <h3 class="mt-4">Top Anagram Hunt</h3>
+  <ol class="list-group list-group-numbered">
+    {% for s in top_anagram %}
+      <li class="list-group-item d-flex justify-content-between">
+        <span>{{ s.user.username }}</span><strong>{{ s.score }}</strong>
+      </li>
+    {% empty %}
+      <li class="list-group-item">No scores yet.</li>
+    {% endfor %}
+  </ol>
 {% endblock %}

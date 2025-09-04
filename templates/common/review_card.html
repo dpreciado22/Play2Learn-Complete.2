@@ -1,0 +1,14 @@
+{% if review %}
+<div class="card border-primary m-auto mb-3 text-center" style="max-width:30rem">
+  <div class="card-header">Random Review</div>
+  <div class="card-body">
+    <h5 class="card-title">{{ review.title }}</h5>
+    <p class="card-text">{{ review.body|truncatechars:180 }}</p>
+    <small class="text-muted">— {{ review.user.username }}</small>
+  </div>
+</div>
+{% else %}
+<div class="alert alert-info m-auto" style="max-width:30rem">
+  No reviews yet.
+</div>
+{% endif %}

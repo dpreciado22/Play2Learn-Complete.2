@@ -4,7 +4,22 @@ from django.contrib.auth.models import User
 from .models import GameScore, Review
 
 class HomePageView(TemplateView):
-    template_name = "pages/home.html"   
+    template_name = "pages/home.html" 
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["featured_reviews"] = Review.objects.order_by("-id")[:10]
+        ctx["top_math"] = (
+            GameScore.objects
+            .filter(game="math_facts")
+            .order_by("-score", "-finished_at")[:10])
+
+        ctx["top_anagram"] = (
+            GameScore.objects
+            .filter(game="anagram_hunt")
+            .order_by("-score", "-finished_at")[:10]
+        )
+        return ctx  
 
 class AboutUsView(TemplateView):
     template_name = "pages/about_us.html"
