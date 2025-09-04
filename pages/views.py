@@ -1,4 +1,5 @@
-from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView 
+from django.urls import reverse_lazy 
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User
 from .models import GameScore, Review
 
@@ -37,3 +38,7 @@ class ReviewCreateView(CreateView):
 class ReviewUpdateView(UpdateView):
     model = Review
     fields = ['title', 'body']
+
+class ReviewDeleteView(DeleteView):
+    model = Review
+    success_url = reverse_lazy('pages:reviews')

@@ -15,6 +15,8 @@
         <small class="text-muted ms-2">by {{ review.user.username }}</small>
         <a href="{% url 'pages:review-update' review.pk %}"
            class="btn btn-info btn-sm float-end ms-2">Update</a>
+        <a href="{% url 'pages:review-update' review.pk %}" class="btn btn-info btn-sm float-end ms-2">Update</a>
+        <a href="{% url 'pages:review-delete' review.pk %}" class="btn btn-danger btn-sm float-end">Delete</a>
       </li>
     {% empty %}
       <li class="list-group-item">No reviews yet.</li>
