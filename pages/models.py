@@ -15,9 +15,18 @@ class GameScore(models.Model):
     class Meta:
         ordering = ['-score', 'finished_at']
 
+    def __str__(self):
+        return f'{self.user.username} | {self.game} | {self.score}'
+
 class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=120)
     body = models.TextField()
     featured = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-featured', '-created_at']
+
+    def __str__(self):
+        return f'{self.title} by {self.user.username}'
