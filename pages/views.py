@@ -1,5 +1,6 @@
-from django.views.generic import TemplateView, ListView, DetailView
-from .models import GameScore
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView 
+from django.contrib.auth.models import User
+from .models import GameScore, Review
 
 class HomePageView(TemplateView):
     template_name = "pages/home.html"   
@@ -15,3 +16,24 @@ class LeaderboardListView(ListView):
 
 class GameScoreDetailView(DetailView):
     model = GameScore
+
+class ReviewListView(ListView):
+    model = Review 
+
+class ReviewDetailView(DetailView):
+    model = Review 
+
+class ReviewCreateView(CreateView):
+    model = Review
+    fields = ['title', 'body'] 
+
+    def form_valid(self, form):
+        if self.request.user.is_authenticated:
+            form.instance.user = self.request.user
+        else:
+            form.instance.user = User.objects.first()
+        return super().form_valid(form)
+
+class ReviewUpdateView(UpdateView):
+    model = Review
+    fields = ['title', 'body']

@@ -1,0 +1,23 @@
+{% extends "_base.html" %}
+
+{% block title %}Reviews{% endblock %}
+{% block header %}Reviews{% endblock %}
+
+{% block main %}
+  <a class="btn btn-success btn-sm float-end" href="{% url 'pages:review-create' %}">
+    + New Review
+  </a>
+  <h2>Reviews</h2>
+  <ul class="list-group list-group-flush mb-3">
+    {% for review in review_list %}
+      <li class="list-group-item">
+        <a href="{{ review.get_absolute_url }}">{{ review.title }}</a>
+        <small class="text-muted ms-2">by {{ review.user.username }}</small>
+        <a href="{% url 'pages:review-update' review.pk %}"
+           class="btn btn-info btn-sm float-end ms-2">Update</a>
+      </li>
+    {% empty %}
+      <li class="list-group-item">No reviews yet.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
