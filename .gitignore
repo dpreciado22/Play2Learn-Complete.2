@@ -158,3 +158,28 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+# Python / Django
+__pycache__/
+*.pyc
+.venv/
+db.sqlite3
+*.sqlite3
+local_settings.py
+/staticfiles/
+media/
+
+# Node (already present, but keep)
+node_modules/
+dist/
+
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Environments (local overrides for Django/Vue)
+.env.local
+.env.*.local
