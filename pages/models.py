@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -7,7 +8,7 @@ class GameScore(models.Model):
         ('math_facts', 'Math Facts Practice'),
         ('anagram_hunt', 'Anagram Hunt'),
     ]
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='scores')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='scores')
     game = models.CharField(max_length=20, choices=GAME_CHOICES)
     finished_at = models.DateTimeField(auto_now_add=True)
     settings = models.JSONField(default=dict)
@@ -20,7 +21,7 @@ class GameScore(models.Model):
         return f'{self.user.username} | {self.game} | {self.score}'
 
 class Review(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=120)
     body = models.TextField()
     featured = models.BooleanField(default=False)
