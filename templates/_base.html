@@ -42,11 +42,16 @@
             <span class="sr-only">(current)</span>
             </a>
         </li>
+          {% if request.user.is_staff %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+            </li>
+          {% endif %}
         <li class="nav-item">
-          <a class="nav-link" href="#">Empty</a>
+          <a class="nav-link" href="#">Math Facts</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Empty</a>
+                <li class="nav-item">
+          <a class="nav-link" href="#">Anagram Hunt</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'pages:leaderboards' %}">Leaderboards</a>
