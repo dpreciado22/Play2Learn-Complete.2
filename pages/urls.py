@@ -1,4 +1,5 @@
 from django.urls import path
+from . import views
 from .views import (
     HomePageView, AboutUsView, MyAccountView, LeaderboardListView, GameScoreDetailView, ReviewListView, ReviewDetailView, ReviewCreateView, ReviewUpdateView, ReviewDeleteView,
 )
@@ -20,4 +21,7 @@ urlpatterns = [
     path("reviews/<slug:slug>/", ReviewDetailView.as_view(), name="review-detail"),
     path("reviews/<slug:slug>/update/", ReviewUpdateView.as_view(), name="review-update"),
     path("reviews/<slug:slug>/delete/", ReviewDeleteView.as_view(), name="review-delete"),
+
+    # Gamescore
+    path('scores/math/record/', views.record_math_score, name='record-math-score'),
 ]

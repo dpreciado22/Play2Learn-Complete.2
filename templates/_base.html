@@ -71,7 +71,7 @@
             Me
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="{% url 'pages:my-account' %}">My Account</a>
+            <a class="dropdown-item" href="{% url 'my-account' %}">My Account</a>
             <div class="dropdown-divider"></div>
             <form method="post" action="{% url 'account_logout' %}">
               {% csrf_token %}
@@ -93,6 +93,17 @@
   </nav>
 </header>
 <main class="m-4 pb-5">
+  {# templates/_base.html #}
+  <main class="m-4 pb-5">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-dismissible fade show message message{{ message.tags }}" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+
   {% block main %}<h2>Welcome!</h2>{% endblock %}
 </main>
 <footer class="fixed-bottom bg-light row">
