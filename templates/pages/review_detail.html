@@ -9,11 +9,27 @@
       <span>{{ review.title }}</span>
       <small class="text-muted">by {{ review.user.username }}</small>
     </div>
+
     <div class="card-body">
       <p class="card-text">{{ review.body }}</p>
     </div>
-    <div class="card-footer">
-      <small class="text-muted">Created: {{ review.created_at|date:"Y-m-d H:i" }}</small>
+
+    <div class="card-footer d-flex justify-content-between align-items-center">
+      <small class="text-muted">
+        Created: {{ review.created_at|date:"Y-m-d H:i" }}
+      </small>
+
+      {# Only show actions to the author or staff #}
+      {% if request.user.is_authenticated and (request.user == review.user or request.user.is_staff) %}
+        <div class="ms-3">
+          <a href="{% url 'pages:review-update' review.slug %}" class="btn btn-sm btn-info me-2">Update</a>
+          <a href="{% url 'pages:review-delete' review.slug %}" class="btn btn-sm btn-danger">Delete</a>
+        </div>
+      {% endif %}
     </div>
+  </div>
+
+  <div class="text-center">
+    <a href="{% url 'pages:reviews' %}" class="btn btn-link">← Back to all reviews</a>
   </div>
 {% endblock %}

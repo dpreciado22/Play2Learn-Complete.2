@@ -13,7 +13,11 @@
       {% for r in featured_reviews %}
         <div class="carousel-item {% if forloop.first %}active{% endif %}">
           <div class="p-4 text-center">
-            <h5>{{ r.title }}</h5>
+            <h5>
+              <a class="text-decoration-none" href="{% url 'pages:review-detail' r.slug %}">
+                {{ r.title }}
+              </a>
+            </h5>
             <p class="mb-0">{{ r.body }}</p>
             <small class="text-muted">— {{ r.user.username }}</small>
           </div>

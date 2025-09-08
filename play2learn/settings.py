@@ -27,23 +27,24 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    'django.contrib.sites',
+    "django.contrib.sites",
     "django.contrib.staticfiles",
     
     # Third-party
-    'crispy_forms',
-    'crispy_bootstrap5',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
+    "crispy_forms",
+    "crispy_bootstrap5",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
 
     # local apps
     "games.apps.GamesConfig",
     "pages.apps.PagesConfig",
-    'common.apps.CommonConfig',
+    "common.apps.CommonConfig",
     "users.apps.UsersConfig",
 ]
 
+AUTH_USER_MODEL = 'users.CustomUser'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
@@ -127,7 +128,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # AUTHENTICATION SETTINGS
-AUTH_USER_MODEL = "users.CustomUser"
 LOGIN_URL = 'account_login'
 LOGIN_REDIRECT_URL = 'pages:homepage'
 

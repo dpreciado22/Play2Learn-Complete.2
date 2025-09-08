@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 from django.urls import reverse
 from common.utils.text import unique_slug
 
@@ -12,7 +11,7 @@ class GameScore(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='scores')
     game = models.CharField(max_length=20, choices=GAME_CHOICES)
     finished_at = models.DateTimeField(auto_now_add=True)
-    settings = models.JSONField(default=dict)
+    game_settings = models.JSONField(default=dict)
     score = models.IntegerField()
 
     class Meta:
@@ -37,7 +36,7 @@ class Review(models.Model):
         return f'{self.title} by {self.user.username}'
     
     def get_absolute_url(self):
-        return reverse('pages:review-detail', args=[str(unique_slug)])
+        return reverse('pages:review-detail', args=[self.slug])
     
     def save(self, *args, **kwargs):
         if not self.slug:
