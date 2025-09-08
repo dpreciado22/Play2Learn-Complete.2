@@ -29,12 +29,6 @@ class HomePageView(TemplateView):
 class AboutUsView(TemplateView):
     template_name = "pages/about_us.html"
 
-
-class MyAccountView(LoginRequiredMixin, TemplateView):
-    template_name = "pages/my_account.html"
-    login_url = "account_login"
-
-
 class LeaderboardListView(ListView):
     model = GameScore
 
@@ -62,7 +56,7 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
 
 
 class OwnerOrStaffMixin(UserPassesTestMixin):
-    raise_exception = True  # show 403 instead of redirect
+    raise_exception = True 
     def test_func(self):
         obj = self.get_object()
         u = self.request.user

@@ -3,7 +3,6 @@ from django.db import models
 from django.urls import reverse
 
 class CustomUser(AbstractUser):
-    pass 
 
     dob = models.DateField("Date of Birth", null=True, blank=True)
 
