@@ -1,20 +1,26 @@
 {% extends '_base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %}My Account{% endblock %}
-
-{% block main %}
+{% block content %}
 <div class="card border-primary m-auto mb-3" style="max-width: 30rem">
   <div class="card-header text-center">My Account</div>
   <div class="card-body">
-    <form method="post" class="m-auto">
+    <form method="post" enctype="multipart/form-data" class="m-auto" novalidate>
       {% csrf_token %}
+      {{ form.non_field_errors }}
       {{ form|crispy }}
-      <button class="form-control btn btn-primary">UPDATE</button>
+
+      {% if request.user.avatar %}
+        <p>Current avatar:</p>
+        <img src="{{ request.user.avatar.url }}" alt="Avatar"
+             style="max-width:200px;max-height:200px;border-radius:8px;">
+      {% endif %}
+
+      <button type="submit" class="btn btn-primary mt-2">Save</button>
     </form>
   </div>
   <div class="card-footer text-center">
-    <p><a href="{% url 'account_change_password' %}">Change Password</a></p>
+    <p><a href="{% url 'password_change' %}">Change Password</a></p>
   </div>
 </div>
 {% endblock %}

@@ -27,3 +27,12 @@ class CustomUserChangeForm(UserChangeForm):
                 years=BIRTH_YEAR_CHOICES,
             )
         }
+
+User = get_user_model()
+
+class MyAccountForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('email', 'username', 'first_name', 'last_name', 'dob', 'avatar')
+        widgets = {"dob": forms.DateInput(attrs={"type": "date"})
+        }

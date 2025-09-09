@@ -10,14 +10,13 @@ from .forms import CustomUserChangeForm
 class MyAccountPageView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     model = get_user_model()
     form_class = CustomUserChangeForm
-    template_name = 'account/my_account.html' 
-    success_message = 'Update Successful'
+    template_name = "account/my_account.html"
+    success_url = reverse_lazy("my-account")      
+    success_message = "Update Successful"
 
-    def get_object(self):
+    def get_object(self, queryset=None):
         return self.request.user
 
 class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
-    success_url = reverse_lazy('my-account')
-    
-form_class = CustomUserChangeForm
-
+    template_name = "account/password_change.html"  
+    success_url = reverse_lazy("my-account")
