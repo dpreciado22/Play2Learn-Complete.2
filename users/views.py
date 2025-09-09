@@ -10,7 +10,7 @@ from .forms import CustomUserChangeForm
 class MyAccountPageView(SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     model = get_user_model()
     form_class = CustomUserChangeForm
-    template_name = 'account/my_account.html'   # <-- keep this
+    template_name = 'account/my_account.html' 
     success_message = 'Update Successful'
 
     def get_object(self):

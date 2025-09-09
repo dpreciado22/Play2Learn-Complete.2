@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 from .views import (
-    HomePageView, AboutUsView, MyAccountView, LeaderboardListView, GameScoreDetailView, ReviewListView, ReviewDetailView, ReviewCreateView, ReviewUpdateView, ReviewDeleteView,
+    HomePageView, AboutUsView, LeaderboardListView, GameScoreDetailView, ReviewListView, ReviewDetailView, ReviewCreateView, ReviewUpdateView, ReviewDeleteView,
 )
 
 app_name = "pages"
