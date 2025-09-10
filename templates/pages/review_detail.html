@@ -15,10 +15,14 @@
     </div>
 
     <div class="card-footer d-flex justify-content-between align-items-center">
-      <small class="text-muted">
+      <small class="text-muted d-block">
+        {% if review.user.avatar %}
+          <img src="{{ review.user.avatar.url }}" alt="{{ review.user.username }}"
+          class="mt-1 rounded float-end" width="80" height="80">
+        {% endif %}
         Created: {{ review.created_at|date:"Y-m-d H:i" }}
         {% if review.updated_at %}
-          &nbsp;|&nbsp; Updated: {{ review.updated_at|date:"Y-m-d H:i" }}
+          <br>Last updated: {{ review.updated_at|date:"Y-m-d H:i" }}
         {% endif %}
       </small>
 

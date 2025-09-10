@@ -1,11 +1,18 @@
 {% extends '_base.html' %}
 {% load crispy_forms_tags %}
 
-{% block content %}
+{% block title %}My Account{% endblock %}
+
+{% block main %}
 <div class="card border-primary m-auto mb-3" style="max-width: 30rem">
   <div class="card-header text-center">My Account</div>
   <div class="card-body">
+
     <form method="post" enctype="multipart/form-data" class="m-auto" novalidate>
+    {% if user.avatar and not form.avatar.errors %}
+      <img src="{{ user.avatar.url }}" alt="Avatar"
+           class="img-thumbnail mx-auto d-block mb-3" style="max-width: 200px;">
+    {% endif %}
       {% csrf_token %}
       {{ form.non_field_errors }}
       {{ form|crispy }}
@@ -13,7 +20,7 @@
       {% if request.user.avatar %}
         <p>Current avatar:</p>
         <img src="{{ request.user.avatar.url }}" alt="Avatar"
-             style="max-width:200px;max-height:200px;border-radius:8px;">
+             style="max-width:240px;max-height:240px;border-radius:8px;">
       {% endif %}
 
       <button type="submit" class="btn btn-primary mt-2">Save</button>

@@ -9,7 +9,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
 
     # Users app Auth
-    path('', include('users.urls')),
+    path("", include("users.urls")),
     path('account/', include('allauth.urls')),
 
     # Local Apps
