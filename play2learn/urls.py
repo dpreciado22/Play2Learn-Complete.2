@@ -8,14 +8,13 @@ urlpatterns = [
     path("admin/doc/", include("django.contrib.admindocs.urls")),
     path("admin/", admin.site.urls),
 
-    # Users app Auth
-    path("", include("users.urls")),
-    path('account/', include('allauth.urls')),
+    # User Management
+    path("account/", include(("users.urls", "users"), namespace="users")),
+    path("account/", include("allauth.urls")),
 
     # Local Apps
-    path("", include("pages.urls")),
     path("", include(("games.urls","games"), namespace="games")),
-
+    path("", include(("pages.urls", "pages"), namespace="pages")),
 ]
 
 if settings.DEBUG:

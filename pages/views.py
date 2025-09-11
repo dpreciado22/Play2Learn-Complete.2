@@ -100,3 +100,9 @@ class AboutUsView(TemplateView):
         messages.warning(request, 'Warning message.')
         messages.error(request, 'Error message.')
         return super().get(request, *args, **kwargs)
+    
+    class MathFactsView(TemplateView):
+        template_name = "pages/math-facts.html"
+
+    class AnagramHuntView(TemplateView):
+        template_name = "pages/anagram-hunt.html"

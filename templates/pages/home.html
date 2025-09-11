@@ -7,6 +7,28 @@
 {% block main %}
   <p>Thank you for visiting our site!</p>
 
+  <h3 class="mt-4">Play now</h3>
+<div class="row g-3">
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">Math Facts Practice</h5>
+        <p class="card-text">Beat the clock on arithmetic drills.</p>
+        <a href="{% url 'math-facts' %}" class="btn btn-primary">Play Math Facts</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">Anagram Hunt</h5>
+        <p class="card-text">Unscramble letters to make words.</p>
+        <a href="{% url 'anagram-hunt' %}" class="btn btn-primary">Play Anagram Hunt</a>
+      </div>
+    </div>
+  </div>
+</div>
+
   {# Carousel #}
   <div id="reviewCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
     <div class="carousel-inner">

@@ -1,0 +1,12 @@
+{% extends "_base_vue.html" %}
+{% load static %}
+
+{% block title %}Math Facts{% endblock %}
+{% block main %}
+  <div id="app"></div>
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script src="{% static 'games/math_facts.js' %}"></script>
+{% endblock %}

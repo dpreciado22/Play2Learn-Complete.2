@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 from .views import (
-    HomePageView, AboutUsView, LeaderboardListView, GameScoreDetailView, ReviewListView, ReviewDetailView, ReviewCreateView, ReviewUpdateView, ReviewDeleteView,
+    HomePageView, MathFactsView, AnagramHuntView, AboutUsView, LeaderboardListView, GameScoreDetailView, ReviewListView, ReviewDetailView, ReviewCreateView, ReviewUpdateView, ReviewDeleteView,
 )
 
 app_name = "pages"
@@ -9,6 +9,10 @@ app_name = "pages"
 urlpatterns = [
     path("", HomePageView.as_view(), name="homepage"),
     path("about-us/", AboutUsView.as_view(), name="about-us"),
+
+    #Games
+    path("math-facts/", MathFactsView.as_view(), name="math-facts"),
+    path("anagram-hunt/", AnagramHuntView.as_view(), name="anagram-hunt"),
 
     # Leaderboards
     path("leaderboards/", LeaderboardListView.as_view(), name="leaderboards"),
