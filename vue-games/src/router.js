@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AnagramHunt from './apps/AnagramHunt'
-import MathFacts from './apps/MathFacts'
-import Home from './apps/Home.vue'
+import AnagramHunt from './apps/AnagramHunt.vue'
+import MathFacts from './apps/MathFacts.vue'
+import HomeView from './apps/Home.vue'
 
 const routes = [
   { path: '/',               name: 'home',         component: HomeView },
@@ -16,4 +16,4 @@ const router = createRouter({
   scrollBehavior() { return { top: 0 } },
 })
 
-export default createRouter({ history: createWebHistory(), routes })
+export default router
