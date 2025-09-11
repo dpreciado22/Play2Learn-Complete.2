@@ -1,4 +1,3 @@
-# games/views.py
 from django.views.generic import TemplateView
 
 class GameBaseView(TemplateView):
@@ -9,7 +8,7 @@ class GameBaseView(TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx["game_slug"] = self.game_slug
-        ctx["page_title"] = self.page_title or self.game_slug.replace("-", " ").title()
+        ctx["page_title"] = self.page_title or (self.game_slug or "").replace("-", " ").title()
         return ctx
 
 class MathFactsView(GameBaseView):
