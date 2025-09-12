@@ -1,13 +1,17 @@
+import json
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.urls import reverse_lazy
+from django.views.decorators.http import require_POST
 from django.views.generic import (
     TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 )
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.shortcuts import redirect
 
 from .models import GameScore, Review
+
 
 class HomePageView(TemplateView):
     template_name = "pages/home.html"
@@ -15,22 +19,50 @@ class HomePageView(TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx["featured_reviews"] = Review.objects.order_by("-id")[:10]
+
         ctx["top_math"] = (
-            GameScore.objects.filter(game="math_facts")
-            .order_by("-score", "-finished_at")[:10]
+            GameScore.objects
+            .filter(game="math-facts")
+            .select_related("user")
+            .order_by("-score", "-created")[:10]
         )
         ctx["top_anagram"] = (
-            GameScore.objects.filter(game="anagram_hunt")
-            .order_by("-score", "-finished_at")[:10]
+            GameScore.objects
+            .filter(game="anagram-hunt")
+            .select_related("user")
+            .order_by("-score", "-created")[:10]
         )
+
+        if self.request.user.is_authenticated:
+            u = self.request.user
+            ctx["my_recent_scores"] = (
+                GameScore.objects
+                .filter(user=u)
+                .select_related("user")
+                .order_by("-created")[:10]
+            )
         return ctx
 
 
 class AboutUsView(TemplateView):
     template_name = "pages/about_us.html"
 
+    def get(self, request, *args, **kwargs):
+        messages.success(request, "Welcome to Play2Learn!")
+        return super().get(request, *args, **kwargs)
+
+
 class LeaderboardListView(ListView):
     model = GameScore
+    template_name = "pages/leaderboards.html"
+    context_object_name = "scores"
+
+    def get_queryset(self):
+        return (
+            GameScore.objects
+            .select_related("user")
+            .order_by("-score", "-created")[:200]
+        )
 
 
 class GameScoreDetailView(DetailView):
@@ -56,7 +88,8 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
 
 
 class OwnerOrStaffMixin(UserPassesTestMixin):
-    raise_exception = True 
+    raise_exception = True
+
     def test_func(self):
         obj = self.get_object()
         u = self.request.user
@@ -75,34 +108,29 @@ class ReviewDeleteView(LoginRequiredMixin, OwnerOrStaffMixin, DeleteView):
     login_url = "account_login"
 
 
-@login_required(login_url="account_login")
+@login_required
+@require_POST
 def record_math_score(request):
-    if request.method == "POST":
-        try:
-            score_val = int(request.POST.get("score", 0))
-        except (TypeError, ValueError):
-            score_val = 0
-        GameScore.objects.create(
-            user=request.user,
-            game="math_facts",
-            score=score_val,
-            settings={},
-        )
-    return redirect("pages:leaderboards")
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+        score = int(data.get("score", 0))
+    except (ValueError, json.JSONDecodeError):
+        return HttpResponseBadRequest("Invalid payload")
 
-class AboutUsView(TemplateView):
-    template_name = "pages/about_us.html"
+    score = max(0, score)
+    gs = GameScore.objects.create(user=request.user, game="math-facts", score=score)
+    return JsonResponse({"ok": True, "id": gs.pk, "score": gs.score})
 
-    def get(self, request, *args, **kwargs):
-        messages.debug(request, 'Debug message.')
-        messages.info(request, 'Info message.')
-        messages.success(request, 'Success message.')
-        messages.warning(request, 'Warning message.')
-        messages.error(request, 'Error message.')
-        return super().get(request, *args, **kwargs)
-    
-    class MathFactsView(TemplateView):
-        template_name = "pages/math-facts.html"
 
-    class AnagramHuntView(TemplateView):
-        template_name = "pages/anagram-hunt.html"
+@login_required
+@require_POST
+def record_anagram_score(request):
+    try:
+        data = json.loads(request.body.decode("utf-8"))
+        score = int(data.get("score", 0))
+    except (ValueError, json.JSONDecodeError):
+        return HttpResponseBadRequest("Invalid payload")
+
+    score = max(0, score)
+    gs = GameScore.objects.create(user=request.user, game="anagram-hunt", score=score)
+    return JsonResponse({"ok": True, "id": gs.pk, "score": gs.score})
