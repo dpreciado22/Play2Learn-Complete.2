@@ -1,6 +1,5 @@
 <template>
   <div class="container" style="width: 500px">
-    <!-- Start Screen -->
     <div v-if="screen=='start'" class="container">
       <div class="row">
         <div class="col">
@@ -27,6 +26,7 @@
       </div>
       <button class="btn btn-primary w-100" @click="play">Play!</button>
     </div>
+
     <!-- Play Screen -->
     <div v-else-if="screen == 'play'" class="container">
       <div class="row">
@@ -86,7 +86,7 @@
         </div>
       </div>
     </div>
-    <!-- End Screen -->
+
     <div v-else-if="screen == 'end'" class="container">
       <div class="row">
         <h4 class="display-4 text-center">Time's Up</h4>
@@ -111,101 +111,87 @@
 </style>
 
 <script>
-import { getRandomInteger } from '@/helpers/helpers';
+import { getRandomInteger } from "@/helpers/helpers";
 
 export default {
-  name: 'MathGame',
+  name: "MathGame",
   data() {
     return {
       score: 0,
       screen: "start",
       maxNumber: 30,
       operation: "+",
-      operations: {
-        "Addition": "+",
-        "Subtraction": "-",
-        "Multiplication": "x",
-        "Division": "/"
-      },
+      operations: { Addition: "+", Subtraction: "-", Multiplication: "x", Division: "/" },
       number1: 0,
       number2: 0,
       userInput: "",
       interval: null,
       timeLeft: 60,
-    }
+    };
+  },
+  computed: {
+    correctAnswer() {
+      if (this.userInput.trim() === "") return false;
+      const input = parseInt(this.userInput);
+      if (this.operation === "+") return input === this.number1 + this.number2;
+      if (this.operation === "-") return input === this.number1 - this.number2;
+      if (this.operation === "x") return input === this.number1 * this.number2;
+      if (this.operation === "/") return input === this.number1 / this.number2;
+      return false;
+    },
   },
   methods: {
     play() {
+      clearInterval(this.interval);
+      this.timeLeft = 60;
       this.score = 0;
       this.screen = "play";
       this.getNewQuestion();
-      this.interval = setInterval(() => {
-        this.timeLeft--;
-      }, 1000)
+      this.interval = setInterval(() => (this.timeLeft -= 1), 1000);
     },
     getNewQuestion() {
-      let num1 = getRandomInteger(0, this.maxNumber + 1);
-      let num2 = getRandomInteger(0, this.maxNumber + 1);
-      if (this.operation == "-") {
+      const num1 = getRandomInteger(0, this.maxNumber + 1);
+      const num2 = getRandomInteger(0, this.maxNumber + 1);
+      if (this.operation === "-") {
         this.number1 = Math.max(num1, num2);
         this.number2 = Math.min(num1, num2);
-      }
-      else if (this.operation == "/") {
+      } else if (this.operation === "/") {
         this.number1 = num1 * num2;
         this.number2 = num2;
-      }
-      else {
+      } else {
         this.number1 = num1;
         this.number2 = num2;
       }
     },
     async recordScore() {
-      // TODO: when Math Facts finishes, make an Ajax call with axios (this.axios)
-      // to record the score on the backend
-    }
-  },
-  computed: {
-    correctAnswer() {
-      if (this.userInput.trim() == "") {
-        return false;
+      try {
+        const res = await this.axios.post(
+          "/scores/math/record/",
+          { score: this.score },
+          { headers: { "X-Requested-With": "XMLHttpRequest" } }
+        );
+        console.log("Score saved:", res.data);
+      } catch (err) {
+        console.warn("Score NOT saved (are you logged in?)", err?.response?.status);
       }
-
-      const input = parseInt(this.userInput);
-      if (this.operation == "+") {
-        return input === this.number1 + this.number2;
-      }
-
-      if (this.operation == "-") {
-        return input === this.number1 - this.number2;
-      }
-
-      if (this.operation == "x") {
-        return input === this.number1 * this.number2;
-      }
-
-      if (this.operation == "/") {
-        return input === this.number1 / this.number2;
-      }
-
-      return false;
     },
   },
   watch: {
     userInput() {
       if (this.correctAnswer) {
-        this.score++; 
+        this.score++;
         this.getNewQuestion();
         this.userInput = "";
       }
     },
-    timeLeft(newTime) {
-      if (newTime === 0) {
+    timeLeft(t) {
+      if (t === 0) {
         clearInterval(this.interval);
         this.timeLeft = 60;
         this.screen = "end";
-        this.recordScore(); // call to record score
+        this.recordScore();
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>

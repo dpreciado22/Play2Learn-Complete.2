@@ -1,26 +1,26 @@
 from django.urls import path
 from . import views
-from .views import (
-    HomePageView, AboutUsView, LeaderboardListView, GameScoreDetailView, ReviewListView, ReviewDetailView, ReviewCreateView, ReviewUpdateView, ReviewDeleteView,
-)
 
 app_name = "pages"
 
 urlpatterns = [
-    path("", HomePageView.as_view(), name="homepage"),
-    path("about-us/", AboutUsView.as_view(), name="about-us"),
+    # Core pages
+    path("", views.HomePageView.as_view(), name="homepage"),
+    path("about-us/", views.AboutUsView.as_view(), name="about-us"),
+    path("contact/", views.ContactView.as_view(), name="contact"),
 
     # Leaderboards
-    path("leaderboards/", LeaderboardListView.as_view(), name="leaderboards"),
-    path("leaderboards/score/<int:pk>/", GameScoreDetailView.as_view(), name="score-detail"),
+    path("leaderboards/", views.LeaderboardListView.as_view(), name="leaderboards"),
+    path("leaderboards/score/<int:pk>/", views.GameScoreDetailView.as_view(), name="score-detail"),
 
     # Reviews
-    path("reviews/", ReviewListView.as_view(), name="reviews"),
-    path("reviews/create/", ReviewCreateView.as_view(), name="review-create"),
-    path("reviews/<slug:slug>/", ReviewDetailView.as_view(), name="review-detail"),
-    path("reviews/<slug:slug>/update/", ReviewUpdateView.as_view(), name="review-update"),
-    path("reviews/<slug:slug>/delete/", ReviewDeleteView.as_view(), name="review-delete"),
+    path("reviews/", views.ReviewListView.as_view(), name="reviews"),
+    path("reviews/create/", views.ReviewCreateView.as_view(), name="review-create"),
+    path("reviews/<slug:slug>/", views.ReviewDetailView.as_view(), name="review-detail"),
+    path("reviews/<slug:slug>/update/", views.ReviewUpdateView.as_view(), name="review-update"),
+    path("reviews/<slug:slug>/delete/", views.ReviewDeleteView.as_view(), name="review-delete"),
 
-    # Gamescore
-    path('scores/math/record/', views.record_math_score, name='record-math-score'),
+    # Scores (AJAX from Vue apps)
+    path("scores/math/record/", views.record_math_score, name="record-math-score"),
+    path("scores/anagram/record/", views.record_anagram_score, name="record-anagram-score"),
 ]

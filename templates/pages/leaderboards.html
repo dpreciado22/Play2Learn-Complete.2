@@ -1,0 +1,66 @@
+{% extends "_base.html" %}
+{% block title %}Leaderboards{% endblock %}
+
+{% block main %}
+<h2>Leaderboards</h2>
+
+<div class="row g-4">
+  <div class="col-md-6">
+    <h3>All Math Facts Scores</h3>
+    <ol class="list-group list-group-numbered">
+      {% for s in math_top %}
+        <li class="list-group-item d-flex justify-content-between">
+          <span>{{ s.user.username }}</span>
+          <strong>{{ s.score }}</strong>
+        </li>
+      {% empty %}
+        <li class="list-group-item">No scores yet.</li>
+      {% endfor %}
+    </ol>
+  </div>
+
+  <div class="col-md-6">
+    <h3>All Anagram Hunt Scores</h3>
+    <ol class="list-group list-group-numbered">
+      {% for s in anagram_top %}
+        <li class="list-group-item d-flex justify-content-between">
+          <span>{{ s.user.username }}</span>
+          <strong>{{ s.score }}</strong>
+        </li>
+      {% empty %}
+        <li class="list-group-item">No scores yet.</li>
+      {% endfor %}
+    </ol>
+  </div>
+</div>
+
+{% if user.is_authenticated %}
+  <h3 class="mt-4">My recent scores</h3>
+  <div class="row g-3">
+    <div class="col-md-6">
+      <h5>Math Facts</h5>
+      <ul class="list-group">
+        {% for s in my_math %}
+          <li class="list-group-item d-flex justify-content-between">
+            <span>{{ s.finished_at|date:"M j, H:i" }}</span><strong>{{ s.score }}</strong>
+          </li>
+        {% empty %}
+          <li class="list-group-item">—</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="col-md-6">
+      <h5>Anagram Hunt</h5>
+      <ul class="list-group">
+        {% for s in my_anagram %}
+          <li class="list-group-item d-flex justify-content-between">
+            <span>{{ s.finished_at|date:"M j, H:i" }}</span><strong>{{ s.score }}</strong>
+          </li>
+        {% empty %}
+          <li class="list-group-item">—</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endif %}
+{% endblock %}

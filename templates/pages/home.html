@@ -2,65 +2,69 @@
 {% load common_tags %}
 
 {% block title %}Home{% endblock %}
-{% block header %}Welcome!{% endblock %}
 
 {% block main %}
   <p>Thank you for visiting our site!</p>
 
   <h3 class="mt-4">Play now</h3>
-<div class="row g-3">
-  <div class="col-md-6">
-    <div class="card h-100">
-      <div class="card-body">
-        <h5 class="card-title">Math Facts Practice</h5>
-        <p class="card-text">Beat the clock on arithmetic drills.</p>
-       <a href="{% url 'games:math-facts' %}" class="btn btn-primary">Play Math Facts</a>
+  <div class="row g-3">
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Math Facts Practice</h5>
+          <p class="card-text">Beat the clock on arithmetic drills.</p>
+          <a href="{% url 'games:math-facts' %}" class="btn btn-primary">Play Math Facts</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Anagram Hunt</h5>
+          <p class="card-text">Unscramble letters to make words.</p>
+          <a href="{% url 'games:anagram-hunt' %}" class="btn btn-primary">Play Anagram Hunt</a>
+        </div>
       </div>
     </div>
   </div>
-  <div class="col-md-6">
-    <div class="card h-100">
-      <div class="card-body">
-        <h5 class="card-title">Anagram Hunt</h5>
-        <p class="card-text">Unscramble letters to make words.</p>
-       <a href="{% url 'games:anagram-hunt' %}" class="btn btn-primary">Play Anagram Hunt</a>
-      </div>
-    </div>
-  </div>
-</div>
 
-  {# Carousel #}
-  <div id="reviewCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+  <div id="reviewCarousel" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="4000">
+    {% if featured_reviews|length > 1 %}
+      <div class="carousel-indicators">
+        {% for r in featured_reviews %}
+          <button type="button" data-bs-target="#reviewCarousel" data-bs-slide-to="{{ forloop.counter0 }}"
+                  {% if forloop.first %}class="active" aria-current="true"{% endif %}
+                  aria-label="Slide {{ forloop.counter }}"></button>
+        {% endfor %}
+      </div>
+    {% endif %}
+
     <div class="carousel-inner">
       {% for r in featured_reviews %}
-        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        <div class="carousel-item{% if forloop.first %} active{% endif %}">
           <div class="p-4 text-center">
-            <h5>
-              <a class="text-decoration-none" href="{% url 'pages:review-detail' r.slug %}">
-                {{ r.title }}
-              </a>
-            </h5>
+            <h5><a class="text-decoration-none" href="{% url 'pages:review-detail' r.slug %}">{{ r.title }}</a></h5>
             <p class="mb-0">{{ r.body }}</p>
             <small class="text-muted">— {{ r.user.username }}</small>
           </div>
         </div>
       {% empty %}
-        <div class="carousel-item active">
-          <div class="p-4 text-center">No reviews yet.</div>
-        </div>
+        <div class="carousel-item active"><div class="p-4 text-center">No reviews yet.</div></div>
       {% endfor %}
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#reviewCarousel" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#reviewCarousel" data-bs-slide="next">
-      <span class="carousel-control-next-icon"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
+
+    {% if featured_reviews|length > 1 %}
+      <button class="carousel-control-prev" type="button" data-bs-target="#reviewCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#reviewCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    {% endif %}
   </div>
 
-  {# Quick leaderboards #}
   <h3 class="mt-4">Top Math Facts</h3>
   <ol class="list-group list-group-numbered mb-3">
     {% for s in top_math %}
@@ -82,4 +86,18 @@
       <li class="list-group-item">No scores yet.</li>
     {% endfor %}
   </ol>
+
+  {% if user.is_authenticated %}
+    <h3 class="mt-4">My recent scores</h3>
+    <ol class="list-group">
+      {% for s in my_recent_scores %}
+        <li class="list-group-item d-flex justify-content-between">
+          <span>{{ s.game|cut:"-"|title }} — {{ s.finished_at|date:"M j, H:i" }}</span>
+          <strong>{{ s.score }}</strong>
+        </li>
+      {% empty %}
+        <li class="list-group-item">Play a game to see your scores here.</li>
+      {% endfor %}
+    </ol>
+  {% endif %}
 {% endblock %}

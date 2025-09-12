@@ -104,6 +104,14 @@ EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = SENDGRID_API_KEY   
 DEFAULT_FROM_EMAIL = 'desipreciado18@gmail.com' 
 
+# Send contact emails to site admins
+ADMINS = (("Site Admin", "desipreciado18@gmail.com"),)
+
+# Dev email: print emails to console
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "no-reply@play2learn.com"
+
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 

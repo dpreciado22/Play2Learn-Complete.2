@@ -1,7 +1,22 @@
 {% extends "_base.html" %}
-
 {% block title %}About Us{% endblock %}
-{% block header %}About Us{% endblock %}
+
 {% block main %}
-  <p>Very interesting information about us!</p>
+<h2>About Play2Learn</h2>
+<p>Play2Learn helps students build fluency with quick, fun practice games. We started this
+project to make math and vocabulary drills feel like play.</p>
+
+<h3>What we offer</h3>
+<ul>
+  <li><strong>Math Facts</strong> – one-minute arithmetic sprints.</li>
+  <li><strong>Anagram Hunt</strong> – unscramble letters to form words.</li>
+</ul>
+
+<h3>Who’s behind it</h3>
+<p>Hi! I’m {{ request.user.get_username|default:"A happy student developer" }}. I built Play2Learn
+as a learning project and to share with classmates, friends, and family. Feedback is very welcome!</p>
+
+<p class="mt-3">
+  Have questions or ideas? <a href="{% url 'pages:contact' %}">Contact us</a>.
+</p>
 {% endblock %}

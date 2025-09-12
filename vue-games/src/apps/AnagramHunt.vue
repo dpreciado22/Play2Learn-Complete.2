@@ -70,16 +70,16 @@
 
 <script>
 import anagrams from "@/helpers/anagrams";
-import {getRandomInteger} from "@/helpers/helpers";
+import { getRandomInteger } from "@/helpers/helpers";
 
 export default {
-  name: 'AnagramGame',
+  name: "AnagramGame",
   data() {
     return {
-      userName: '',
+      userName: "",
       score: 0,
       timeLeft: 60,
-      anagrams: anagrams,
+      anagrams,
       currentWord: "",
       anagramList: [],
       wordLength: 5,
@@ -87,63 +87,72 @@ export default {
       correctGuesses: [],
       userInput: "",
       interval: null,
-    }
+    };
   },
   computed: {
     guessesLeft() {
       return this.anagramList.length - this.correctGuesses.length - 1;
-    }
+    },
   },
   methods: {
     play() {
+      clearInterval(this.interval);
+      this.timeLeft = 60;
       this.score = 0;
       this.screen = "play";
       this.newAnagramList();
-      
-      this.interval = setInterval(() => {
-        this.timeLeft -= 1;
-      }, 1000)
+      this.interval = setInterval(() => (this.timeLeft -= 1), 1000);
     },
     checkAnswer() {
-      const input = this.userInput.toLowerCase()
-      if (this.anagramList.includes(input) && !this.correctGuesses.includes(input) && this.currentWord !== input) {
+      const input = this.userInput.toLowerCase();
+      if (
+        this.anagramList.includes(input) &&
+        !this.correctGuesses.includes(input) &&
+        this.currentWord !== input
+      ) {
         this.correctGuesses.push(input);
         this.userInput = "";
         this.score += 1;
-
-        if (this.correctGuesses.length == this.anagramList.length - 1) {
+        if (this.correctGuesses.length === this.anagramList.length - 1) {
           this.newAnagramList();
         }
       }
     },
     newAnagramList() {
-      const currentAnagramList = [...this.anagramList];
-      const potentialAnagramLists = this.anagrams[this.wordLength];
-      this.anagramList = [...potentialAnagramLists[getRandomInteger(0, potentialAnagramLists.length)]];
-      while (this.anagramList[0] === currentAnagramList[0]) {
-        this.anagramList = [...potentialAnagramLists[getRandomInteger(0, potentialAnagramLists.length)]];
+      const current = [...this.anagramList];
+      const lists = this.anagrams[this.wordLength];
+      this.anagramList = [...lists[getRandomInteger(0, lists.length)]];
+      while (this.anagramList[0] === current[0]) {
+        this.anagramList = [...lists[getRandomInteger(0, lists.length)]];
       }
       this.currentWord = this.anagramList[getRandomInteger(0, this.anagramList.length)];
       this.correctGuesses = [];
     },
     async recordScore() {
-      // TODO: when Anagram Hunt finishes, make an Ajax call with axios (this.axios)
-      // to record the score on the backend
-    }
+      try {
+        const res = await this.axios.post(
+          "/scores/anagram/record/",
+          { score: this.score },
+          { headers: { "X-Requested-With": "XMLHttpRequest" } }
+        );
+        console.log("Score saved:", res.data);
+      } catch (err) {
+        console.warn("Score NOT saved (are you logged in?)", err?.response?.status);
+      }
+    },
   },
   watch: {
     userInput() {
-      // check answer when user input changes
-      this.checkAnswer()
+      this.checkAnswer();
     },
-    timeLeft(newValue) {
-      if (newValue == 0) {
-        this.screen = "end";
-        this.timeLeft = 60;
+    timeLeft(newVal) {
+      if (newVal === 0) {
         clearInterval(this.interval);
-        this.recordScore(); // calls recordScore
+        this.timeLeft = 60;
+        this.screen = "end";
+        this.recordScore();
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>

@@ -1,4 +1,3 @@
-// vue-games/src/main.js
 import { createApp } from 'vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
@@ -27,4 +26,5 @@ router.isReady().then(() => {
     }
   }
   app.mount('#app')
+
 })
